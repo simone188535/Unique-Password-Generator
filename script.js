@@ -7,6 +7,12 @@ const allowedPasswordCharTypes = {
   special: false,
 };
 
+const lowercaseOptions = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+const uppercaseOptions = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+const numericOptions = [1,2,3,4,5,6,7,8,9,0];
+const specialOptions = ['@', '%', '+', '\\', '\/', '\'', '!', '#', '$', '^', '?', ':', '.', '(', ')', '{', '}', '[', ']', '~', '-', '_', '`'];
+
+
 // Write password to the #password input
 function writePassword() {
   var password = generatePassword();
@@ -90,6 +96,21 @@ function generatePassword() {
     alert('At least one character type must be allowed!');
     return '';
   }
+
+  // create a large array using the characters approved by the user
+  const approvedPasswordCharArray = [];
+  for (const property in allowedPasswordCharTypes) {
+    // object value is true, append to approvedPasswordCharArray
+    if (allowedPasswordCharTypes[property]) {
+      const ArrayToAdd = `${property}Options`;
+      console.log('ArrayToAdd', [ArrayToAdd]);
+      console.log('lowercaseOptions', lowercaseOptions);
+      approvedPasswordCharArray.concat(ArrayToAdd);
+    }
+
+  }
+
+  console.log(approvedPasswordCharArray);
 
   // console.log("allowedPasswordCharTypes ", allowedPasswordCharTypes);
 

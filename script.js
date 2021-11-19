@@ -1,16 +1,29 @@
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
-const allowedPasswordCharTypes = {
-  lowercase: false,
-  uppercase: false,
-  numeric: false,
-  special: false,
-};
+const allowedPasswordCharTypes = [
+  {
+    type: 'lowercase',
+    inUse: false,
+    Options: ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+  },
+  {
+    type: 'uppercase',
+    inUse: false,
+    Options: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+  },
+  {
+    type: 'numeric',
+    inUse: false,
+    Options: [1,2,3,4,5,6,7,8,9,0]
+  },
+  {
+    type: 'special',
+    inUse: false,
+    Options: ['@', '%', '+', '\\', '\/', '\'', '!', '#', '$', '^', '?', ':', '.', '(', ')', '{', '}', '[', ']', '~', '-', '_', '`']
+  }
+];
 
-const lowercaseOptions = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
-const uppercaseOptions = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-const numericOptions = [1,2,3,4,5,6,7,8,9,0];
-const specialOptions = ['@', '%', '+', '\\', '\/', '\'', '!', '#', '$', '^', '?', ':', '.', '(', ')', '{', '}', '[', ']', '~', '-', '_', '`'];
+
 
 
 // Write password to the #password input
@@ -23,11 +36,10 @@ function writePassword() {
 
 // reset all allowedPasswordCharTypes to false
 function resetAllowedPasswordCharType() {
-  // console.log('WORKING');
-  for (const property in allowedPasswordCharTypes) {
+  for (const property of allowedPasswordCharTypes) {
 
-    if (allowedPasswordCharTypes[property]) {
-      allowedPasswordCharTypes[property] = false;
+    if (property.inUse) {
+      property.inUse = false;
     }
   }
 }
@@ -37,10 +49,10 @@ function resetAllowedPasswordCharType() {
   and reset allowedPasswordCharTypes
   */
   function wereAnyPasswordCharTypesApproved() {
-    for (const property in allowedPasswordCharTypes) {
+    for (const property of allowedPasswordCharTypes) {
      
       // if at least one character type is true, stop loop early
-      if (allowedPasswordCharTypes[property] === true) {
+      if (property.inUse) {
         return true;
       }
     }
@@ -56,17 +68,17 @@ function checkPasswordCharTypes(allowedPasswordCharTypeKey, confirmMsg) {
 
   // if the user approves of the confirmation message, change objs value to true
   if (isCharacterTypeAllowed) {
-    allowedPasswordCharTypes[allowedPasswordCharTypeKey] = true;
+    allowedPasswordCharTypes[allowedPasswordCharTypeKey].inUse = true;
   }
 }
 
 function generatePassword() {
   // reset types if needed
-  resetAllowedPasswordCharType()
+  resetAllowedPasswordCharType();
 
   const passwordSize = prompt("How long would you like you password to be?");
   const parsedPasswordSize = parseInt(passwordSize) || "";
-  // console.log('passwordSize', passwordSize);
+
   // check password size
   if (!Number.isInteger(parsedPasswordSize)) {
     // any provided value that is not a number is not allowed
@@ -83,12 +95,10 @@ function generatePassword() {
     check if the user is okay with their password having these types: 
     lowercase, uppercase, numeric, and/or special characters.
   */
-  checkPasswordCharTypes("lowercase", "lowercase letter?");
-  checkPasswordCharTypes("uppercase", "uppercase letter?");
-  checkPasswordCharTypes("numeric", "numbers?");
-  checkPasswordCharTypes("special", "special characters?");
-
-  console.log("allowedPasswordCharTypes ", allowedPasswordCharTypes);
+  checkPasswordCharTypes(0, "lowercase letter?");
+  checkPasswordCharTypes(1, "uppercase letter?");
+  checkPasswordCharTypes(2, "numbers?");
+  checkPasswordCharTypes(3, "special characters?");
 
   const ifAnyPasswordCharTypesApproved = wereAnyPasswordCharTypesApproved();
   
@@ -98,21 +108,25 @@ function generatePassword() {
   }
 
   // create a large array using the characters approved by the user
-  const approvedPasswordCharArray = [];
-  for (const property in allowedPasswordCharTypes) {
-    // object value is true, append to approvedPasswordCharArray
-    if (allowedPasswordCharTypes[property]) {
-      const ArrayToAdd = `${property}Options`;
-      console.log('ArrayToAdd', [ArrayToAdd]);
-      console.log('lowercaseOptions', lowercaseOptions);
-      approvedPasswordCharArray.concat(ArrayToAdd);
+  let approvedPasswordChars = [];
+  for (const property of allowedPasswordCharTypes) {
+   
+    // if object value is true, append to approvedPasswordChars
+    if (property.inUse) {
+      approvedPasswordChars = approvedPasswordChars.concat(property.Options);
     }
 
   }
 
-  console.log(approvedPasswordCharArray);
+  // select random password using the approved characters
+  let password = '';
+  for (let i = 0; i < parsedPasswordSize; i++) {
 
-  // console.log("allowedPasswordCharTypes ", allowedPasswordCharTypes);
+    const random = Math.floor(Math.random() * approvedPasswordChars.length);
+    password += approvedPasswordChars[random];
+  }
+
+  return password;
 
 }
 

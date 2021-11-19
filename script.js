@@ -15,8 +15,18 @@ function writePassword() {
   passwordText.value = password;
 }
 
-// 
-function checkPasswordCharTypes(confirmMsg, allowedPasswordCharTypeKey) {
+// reset all allowedPasswordCharTypes to false
+function resetAllowedPasswordCharType() {
+  for (const property in allowedPasswordCharTypes) {
+
+    console.log('allowedPasswordCharTypes[property]', allowedPasswordCharTypes[property]);
+    if (allowedPasswordCharTypes[property]) {
+      allowedPasswordCharTypes[property] = false;
+    }
+  }
+}
+
+function checkPasswordCharTypes(allowedPasswordCharTypeKey, confirmMsg) {
   const isCharacterTypeAllowed = confirm(
     `Should your password contain ${confirmMsg}`
   );
@@ -65,6 +75,23 @@ function generatePassword() {
   );
 
   console.log("allowedPasswordCharTypes ",allowedPasswordCharTypes);
+
+  /* 
+  if all password character types are NOT allowed, send an alert 
+  and reset allowedPasswordCharTypes
+  */
+ // !! make a function for this
+  for (const property in allowedPasswordCharTypes) {
+    // console.log(`${property}: ${object[property]}`);
+    if (allowedPasswordCharTypes[property] === true) {
+      break;
+    }
+
+    // add after for loop
+    // alert('At least one character type must be allowed!');
+    // resetAllowedPasswordCharType();
+    // return;
+  }
 }
 
 // Add event listener to generate button

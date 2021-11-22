@@ -2,29 +2,104 @@
 var generateBtn = document.querySelector("#generate");
 const allowedPasswordCharTypes = [
   {
-    type: 'lowercase',
+    type: "lowercase",
     inUse: false,
-    Options: ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+    Options: [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "q",
+      "r",
+      "s",
+      "t",
+      "u",
+      "v",
+      "w",
+      "x",
+      "y",
+      "z",
+    ],
   },
   {
-    type: 'uppercase',
+    type: "uppercase",
     inUse: false,
-    Options: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+    Options: [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z",
+    ],
   },
   {
-    type: 'numeric',
+    type: "numeric",
     inUse: false,
-    Options: [1,2,3,4,5,6,7,8,9,0]
+    Options: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
   },
   {
-    type: 'special',
+    type: "special",
     inUse: false,
-    Options: ['@', '%', '+', '\\', '\/', '\'', '!', '#', '$', '^', '?', ':', '.', '(', ')', '{', '}', '[', ']', '~', '-', '_', '`']
-  }
+    Options: [
+      "@",
+      "%",
+      "+",
+      "\\",
+      "/",
+      "'",
+      "!",
+      "#",
+      "$",
+      "^",
+      "?",
+      ":",
+      ".",
+      "(",
+      ")",
+      "{",
+      "}",
+      "[",
+      "]",
+      "~",
+      "-",
+      "_",
+      "`",
+    ],
+  },
 ];
-
-
-
 
 // Write password to the #password input
 function writePassword() {
@@ -37,7 +112,6 @@ function writePassword() {
 // reset all allowedPasswordCharTypes to false
 function resetAllowedPasswordCharType() {
   for (const property of allowedPasswordCharTypes) {
-
     if (property.inUse) {
       property.inUse = false;
     }
@@ -48,18 +122,16 @@ function resetAllowedPasswordCharType() {
   if all password character types are NOT allowed, send an alert 
   and reset allowedPasswordCharTypes
   */
-  function wereAnyPasswordCharTypesApproved() {
-    for (const property of allowedPasswordCharTypes) {
-     
-      // if at least one character type is true, stop loop early
-      if (property.inUse) {
-        return true;
-      }
+function wereAnyPasswordCharTypesApproved() {
+  for (const property of allowedPasswordCharTypes) {
+    // if at least one character type is true, stop loop early
+    if (property.inUse) {
+      return true;
     }
-
-    return false;
   }
 
+  return false;
+}
 
 function checkPasswordCharTypes(allowedPasswordCharTypeKey, confirmMsg) {
   const isCharacterTypeAllowed = confirm(
@@ -82,13 +154,14 @@ function generatePassword() {
   // check password size
   if (!Number.isInteger(parsedPasswordSize)) {
     // any provided value that is not a number is not allowed
-    return alert("Please enter a number");
+    alert("Please enter a number");
+    return "";
   } else if (parsedPasswordSize < 8) {
-    return alert("Too short! Your password needs to be at least 8 characters.");
+    alert("Too short! Your password needs to be at least 8 characters.");
+    return "";
   } else if (parsedPasswordSize > 128) {
-    return alert(
-      "Too long! Your password needs to be less that 128 characters."
-    );
+    alert("Too long! Your password needs to be less that 128 characters.");
+    return "";
   }
 
   /*
@@ -101,33 +174,29 @@ function generatePassword() {
   checkPasswordCharTypes(3, "special characters?");
 
   const ifAnyPasswordCharTypesApproved = wereAnyPasswordCharTypesApproved();
-  
+
   if (!ifAnyPasswordCharTypesApproved) {
-    alert('At least one character type must be allowed!');
-    return '';
+    alert("At least one character type must be allowed!");
+    return "";
   }
 
   // create a large array using the characters approved by the user
   let approvedPasswordChars = [];
   for (const property of allowedPasswordCharTypes) {
-   
     // if object value is true, append to approvedPasswordChars
     if (property.inUse) {
       approvedPasswordChars = approvedPasswordChars.concat(property.Options);
     }
-
   }
 
   // select random password using the approved characters
-  let password = '';
+  let password = "";
   for (let i = 0; i < parsedPasswordSize; i++) {
-
     const random = Math.floor(Math.random() * approvedPasswordChars.length);
     password += approvedPasswordChars[random];
   }
 
   return password;
-
 }
 
 // Add event listener to generate button
